@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cadastro</title>    
+        <link rel="stylesheet" href="styles/cadastro.css" media="screen">   
+    </head>
+    <body>
+        <img src="styles/imgs/logo.svg" class="logo"> 
+
+        <div class="title_form">PRIMEIRO ACESSO</div>
+   
+        <div class="register_form">
+          <form action="/cadastro" method="post">
+            
+            <input class="input" type="text" name='firstname' placeholder="Nome">                    
+            <input class="input" type="tex" name='lastname' placeholder="Sobrenome">
+            <input class="input" type="text" name='email' placeholder="Email">        
+            <input class="input" type="text" name='phone' placeholder="Telefone">
+            <input class="input" type="text" name='username' placeholder="Usuário">        
+            <input class="input" type="password" name='password' placeholder="Senha">  
+            <input class="input" type="password" name='validate_password' placeholder="Confirmar senha">  
+            
+            <div class="buttonHolder">
+              <input class='submit_button' type="submit" value="Registrar">
+            </div>            
+          </form>
+        </div>               
+        <div class="footer">Universidade de São Paulo, USP © 2023</div>        
+    </body>    
+    <script>
+      let message = "{{error}}";     
+      if(message != ""){
+      alert(message);      
+      }
+    </script>
+</html>

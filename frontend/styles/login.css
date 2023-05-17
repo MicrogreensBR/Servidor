@@ -1,0 +1,92 @@
+body {
+  background-color: rgba(250, 233, 157, 0.822);
+  font-family: 'Open Sans', sans-serif;
+}
+
+.logo{
+  height: 300px;
+  display: block; 
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+.login_form{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+.input {
+  margin: 5px;
+  font-size: 20px;
+  border-radius: 5px;
+  background-color: rgba(221, 204, 128, 0.822);
+  height: 40px;
+  width: 300px;
+  border: 2px solid rgba(173, 158, 90, 0.822);
+  
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #552200;
+  opacity: 0.4; /* Firefox */
+}
+
+.buttonHolder{
+  text-align: center;
+}
+
+.submit_button {
+  font-weight: 600;  
+  background-color: rgba(221, 204, 128, 0.822);
+  color: #552200;
+  border: 2px solid rgba(173, 158, 90, 0.822);
+  height: 40px;
+  width: 150px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 20px;  
+  transition-duration: 0.4s;
+  margin-top: 20px;
+ 
+}
+
+.submit_button:hover{
+  opacity:0.7;
+}
+
+.submit_button:active{
+  opacity:0.2;
+}
+
+.register_link{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  margin-top: 40px;
+
+}
+
+a:visited,
+a:link{
+  color: #552200;
+}
+
+a:hover {
+  opacity:0.5;
+}
+
+.footer{
+  position: fixed;     
+  text-align: center;    
+  bottom: 10px; 
+  width: 100%;
+  color: #552200;
+}

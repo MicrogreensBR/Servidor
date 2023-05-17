@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>    
+        <link rel="stylesheet" href="styles/login.css" media="screen">   
+    </head>
+    <body>
+        <img src="styles/imgs/logo.svg" class="logo">    
+
+        <div class="login_form">
+          <form action="/login" method="post">
+            <input class="input" type="text" name='user' placeholder="Usuário"><br> 
+            <input class="input" type="password" name='password' placeholder="Senha"><br> 
+            <div class="buttonHolder">
+              <input class='submit_button' type="submit" value="Entrar">
+            </div>            
+          </form>
+        </div>        
+        <div class="register_link">
+          <a href="cadastro">Ainda não está registrado?</a>
+        </div>
+        <div class="footer">Universidade de São Paulo, USP © 2023</div>        
+    </body>    
+    <script>
+      let message = "{{error}}";     
+      if(message != ""){
+      alert(message);      
+      }
+    </script>
+</html>
