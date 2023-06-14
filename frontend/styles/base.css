@@ -1,0 +1,88 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Roboto, sans-serif;
+  font-weight: 400; 
+}
+
+body{
+  background-color: rgba(250, 233, 157, 0.822);  
+  height: 100vh; 
+}
+
+nav.menu_lateral{
+  width: 80px; 
+  height:100%;
+  background-color: rgba(173, 158, 90, 0.822);
+  padding: 40px 0 40px 1%;  
+  box-shadow: 3px 0 0 #552200;
+  position: fixed ;
+  top:0;
+  left:0;
+  overflow: hidden;
+  transition: 0.3s;
+  right:auto;
+}
+
+nav.menu_lateral:hover{
+  width: 300px;  
+}
+
+nav.menu_lateral:hover ~ .main{
+  margin-left: 300px;
+}
+
+.btn_expandir{
+  width: 100%;
+  padding-left: 15px;  
+  margin-bottom: 10px;
+}
+
+.btn_expandir > i{
+  color: #552200;  
+  font-size: 24px;
+  cursor: pointer;
+}
+
+ul{
+  height: 100%;
+  list-style-type: none;  
+  
+}
+
+ul li.item_menu a{
+  color: #552200;  
+  text-decoration: none;
+  font-size: 20px;
+  padding: 20px 4%;  
+  display: flex;  
+  margin-bottom: 20px;
+  line-height: 30px;
+}
+
+ul li.item_menu{
+  transition: 0.4s;
+} 
+ul li.item_menu:hover{
+  background-color: rgba(241, 228, 167, 0.822);
+  opacity:0.8
+} 
+
+ul li.item_menu a .txt_link{
+  margin-left: 25px;
+  white-space: nowrap;
+}
+
+ul li.item_menu a .icon > i{
+  font-size: 30px;
+  margin-left: 10px;
+}
+
+.main{
+  transition: 0.3s;
+  height: 100vh;
+  margin-left: 80px;
+  text-align: center;
+}
+

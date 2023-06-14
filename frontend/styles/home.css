@@ -1,0 +1,15 @@
+.logo{
+  height: 200px;
+  display: block; 
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+  position: relative;
+}
+
+.welcome{
+  font-size: 45px;
+  color: rgba(121,175,43,255);
+  font-weight: 600;
+  text-shadow: 3px 1px #000000;
+}

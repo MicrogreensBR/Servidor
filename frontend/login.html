@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Login</title>    
+        <title>Login</title>            
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styles/login.css" media="screen">   
-    </head>
+      </head>
     <body>
-        <img src="styles/imgs/logo.svg" class="logo">    
-
+      <div class="screen">
+        <div class="logo">
+          <img src="styles/imgs/logo.svg">
+      </div>
+      <div class="menu">       
+        <div class="errorMSG">{{error}}</div>        
         <div class="login_form">
           <form action="/login" method="post">
             <input class="input" type="text" name='user' placeholder="Usuário"><br> 
@@ -18,13 +24,11 @@
         </div>        
         <div class="register_link">
           <a href="cadastro">Ainda não está registrado?</a>
-        </div>
-        <div class="footer">Universidade de São Paulo, USP © 2023</div>        
+          <a href="#">Esqueceu a senha?</a>
+        </div>         
+        <footer class="footer">
+            <span>Universidade de São Paulo, USP © 2023</span> 
+        </footer>
+      </div>
     </body>    
-    <script>
-      let message = "{{error}}";     
-      if(message != ""){
-      alert(message);      
-      }
-    </script>
 </html>

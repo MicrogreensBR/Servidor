@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="styles/dashboardList.css">
+{% endblock %}
+
+{% block main %}
+  <div class="header"> Seus Babygreens:</div>
+  <div class="lista">
+    {% if micros != [] %}
+      {% for micro, info_cultivo in micros %}
+      <a href="/dashboard?cod={{ micro.cod_esp }}">
+        <div class="ficha">
+          <div class="name">{{ micro.name_esp }}</div>
+          <div class="code">Código: {{ micro.cod_esp }}</div>  
+          {% if info_cultivo != None and info_cultivo.status_plantar %}   
+            <div class="foot">
+              <div class="seed">Cultivo: {{ info_cultivo.seed }}</div>      
+              <div class="info_status">Status:<span class="status online"></span></div>   
+            </div>     
+          {% elif info_cultivo != None and not info_cultivo.status_plantar %}    
+            <div class="foot">
+              <div class="seed">Cultivo: {{ info_cultivo.seed }}</div>      
+              <div class="info_status">Status:<span class="status waiting"></span></div>   
+            </div>            
+          {% else %}
+          <div class="foot">
+            <div class="info_status">Status:<span class="status offline"></span></div> 
+          </div>
+          {% endif %}            
+      </a>
+      </div>    
+    {% endfor %}
+   {% else %}
+   <div class="mensagem">    
+    <p class="text">Você ainda não tem um <br> Babygreen para chamar de seu :(</p>
+   </div>    
+   {% endif %}
+  </div>
+{% endblock %}

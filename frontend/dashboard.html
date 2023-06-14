@@ -1,3 +1,151 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-Bem-vindo {{ session.name }}
+{% block styles %}
+  <link rel="stylesheet" href="styles/dashboard.css"> 
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block main %}
+  <div class='header'>
+    <div class="title">Dados de {{ esp.name_esp }}</div>    
+    <div id="clock" class="clock"></div>
+  </div>
+  <div class='subheader'> Cultivo: {{ esp_cultivo.seed }}</div>
+
+  <div class="infobox">
+    <div class="infobox-child">
+      <div class="infobox-title">Data de início</div>
+      <div class="infobox-content">{{ start_date }}</div>
+    </div>
+    <div class="infobox-child">
+      <div class="infobox-title">Temperatura</div>
+      <div class="infobox-content">
+        <span id="temperatura"></span>
+      </div>
+    </div>
+    <div class="infobox-child">
+      <div class="infobox-title">Umidade</div>
+      <div class="infobox-content"><span id="umidade"></span></div>
+    </div>
+    <div class="infobox-child">
+      <div class="infobox-title">Altura</div>
+      <div class="infobox-content"><span id="altura"></span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="chartbox">
+    <div class="chartbox_child">
+      <canvas id="chart1"></canvas>
+    </div>
+    <div class="chartbox_child">
+      <canvas id="chart2"></canvas>
+    </div>
+  </div>
+
+  <div class="controle">
+    <div class="title"> Painel de controle</div>
+    <div class="menu">
+      <a class="botao_box" onclick="publishMQTT('irrigar')"><div class="botao">IRRIGAR</div></a>
+      <a class="botao_box" onclick="publishMQTT('iluminar')"><div class="botao">ILUMINAR</div></a>
+      <a class="botao_box" onclick="publishMQTT('ventilar')"><div class="botao">VENTILAR</div></a>    
+    </div>
+  </div>
+
+  <div class="footer"></div>
+
+
+{% endblock %}
+
+{% block scriptjs %}
+<script>
+  // CONFIGURAÇÃO INICIAL
+
+  var aTags = document.getElementsByClassName("botao_box");
+  var ltstatus = ["{{ esp_cultivo.status_irrigar }}","{{ esp_cultivo.status_iluminar }}","{{ esp_cultivo.status_ventilar }}"];
+ 
+  for (var i = 0; i < aTags.length; i++) {   
+    if (ltstatus[i] == "True") {     
+      aTags[i].firstChild.style.backgroundColor = 'rgba(121,175,43,255)';
+    }
+    else {      
+      aTags[i].firstChild.style.backgroundColor = 'rgb(212, 212, 212)';
+    }
+  }
+</script>
+<script>
+    
+  function publishMQTT(cmd) {
+
+    var aTags = document.getElementsByTagName("a");
+    var found;
+
+    for (var i = 0; i < aTags.length; i++) {
+      if (aTags[i].textContent == cmd.toUpperCase()) {
+        found = aTags[i];
+        break;
+      }
+    }
+     
+    $.get('/publish/'.concat("{{ esp.cod_esp }}", "/", cmd));  
+
+    found_bc = window.getComputedStyle(found.firstChild,null).getPropertyValue('background-color');  
+    
+    if (found_bc == 'rgb(212, 212, 212)') {     
+      found.firstChild.style.backgroundColor = 'rgba(121,175,43,255)';
+    }
+    else {      
+      found.firstChild.style.backgroundColor = 'rgb(212, 212, 212)';
+    }
+
+  }
+</script>
+
+<script type="text/javascript" src="styles/scripts/chartConfig.js"></script>
+
+<script> 
+
+  const MAX_DATA_COUNT = 20;
+  
+  function requestData() {
+
+    var requests = $.get('/data');    
+    
+    var tm = requests.done(function(results) {      
+
+      if (chartTemperature.data.labels.length > MAX_DATA_COUNT) {
+        removeFirstData(chartTemperature);
+      }
+      addData(chartTemperature, results[0], results[1]);
+
+      if (chartUmidade.data.labels.length > MAX_DATA_COUNT) {
+        removeFirstData(chartUmidade);
+      }         
+      addData(chartUmidade, results[0], results[2]);
+
+      document.getElementById('temperatura').innerHTML = Math.round(results[1]) + " °C"
+      document.getElementById('umidade').innerHTML = Math.round(results[2]) + "%"
+      document.getElementById('altura').innerHTML = Math.round(results[3]) + " cm"
+
+      setTimeout(requestData, 2000);
+    });
+  };
+
+  function requestTime() {
+
+    var requests = $.get('/time');   
+    
+    var tm = requests.done(function(results) {          
+     document.getElementById('clock').innerHTML = results         
+     setTimeout(requestTime, 1000);
+    });
+
+  };
+
+  requestTime();
+  requestData();    
+  
+</script>
+{% endblock %}

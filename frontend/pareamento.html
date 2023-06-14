@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block styles %}
+  <link rel="stylesheet" href="styles/pareamento.css">
+{% endblock %}
+
+{% block main %}
+  <img class="logo" src="styles/imgs/logo.svg">
+  <div class="info">       
+    <div class="text">
+      <p>Parabéns por adquirir um novo 
+        sistema de supervisão Babygreens para cuidar dos seus microverdes! 
+        Estamos felizes em fazer parte da sua jornada de cultivo, 
+        oferecendo uma solução abrangente e inovadora. 
+        Com sensores de temperatura e umidade, 
+        juntamente com notificações de colheita, 
+        nosso sistema garantirá condições ideais para o 
+        crescimento saudável das plantas. 
+        Esperamos que você desfrute de resultados excepcionais, 
+        praticidade e suporte dedicado ao longo dessa parceria.<br><br>        
+        
+        Para parear seu novo aparelho com o painel de controle, insira
+        o código do produto e dê a ele um nome bem criativo: </p>
+    </div>    
+  </div>
+
+  <div class="forms">
+    <form action="/pair" method="post">
+      <input class="input" type="text" name='code_esp' placeholder="Código"><br> 
+      <input class="input" type="text" name='name_esp' placeholder="Nome"><br> 
+      <div class="buttonHolder">
+        <input class='submit_button' type="submit" value="Parear">
+      </div>            
+    </form>
+
+  </div>
+{% endblock %}  
+
+{% block scriptjs %}
+<script>
+  let message = "{{error}}";     
+  if(message != ""){
+    alert(message);      
+  }
+</script>
+{% endblock %}

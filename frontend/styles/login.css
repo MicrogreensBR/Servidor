@@ -1,43 +1,90 @@
+html,
 body {
   background-color: rgba(250, 233, 157, 0.822);
   font-family: 'Open Sans', sans-serif;
+  height: 100%;
+  width: 100%;
+  margin: 0;  
 }
 
-.logo{
-  height: 300px;
-  display: block; 
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
+.screen{
+  width: 100vw;
+  height: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: hidden;  
+}
+
+:root {
+  --logo_height: 50%;
+  --logo_menu: 40%;
+  --logo_footer: calc(var(--logo_height) - var(--logo_menu));
+}
+
+.logo{ 
+  height: var(--logo_height);
+  text-align: center;  
+}
+
+.menu{
+  height: var(--logo_menu);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.footer{
+  height: var(--logo_footer);
+  text-align: center;
+}
+
+.logo > img{
+  width: 100%;
+  height: 100%;  
+}
+
+.errorMSG{   
+  flex: 1;
+  height: 10%;
+  font-size: calc(0.85rem + 0.390625vw);  
+  padding-bottom: 1%;
+  color:#552200;  
 }
 
 .login_form{
-  display: flex;
-  justify-content: center;
+  height: 70%;
+  display:flex;
   align-items: center;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
+  justify-content: center;
 }
 
+.register_link{ 
+  height: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;  
+  font-size: calc(0.65rem + 0.390625vw);
+  padding-top: 1.5%;
+}
+
+.register_link > a{
+  padding-top: 1%;
+}
 .input {
-  margin: 5px;
-  font-size: 20px;
+  margin: 1%;
+  font-size: calc(1.2rem + 0.390625vw);
   border-radius: 5px;
   background-color: rgba(221, 204, 128, 0.822);
-  height: 40px;
-  width: 300px;
+  width: 80%;
   border: 2px solid rgba(173, 158, 90, 0.822);
-  
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+::placeholder {
   color: #552200;
-  opacity: 0.4; /* Firefox */
-}
-
-.buttonHolder{
-  text-align: center;
+  opacity: 0.4;
+  margin: 1% 1% 1% 1%;
 }
 
 .submit_button {
@@ -45,14 +92,12 @@ body {
   background-color: rgba(221, 204, 128, 0.822);
   color: #552200;
   border: 2px solid rgba(173, 158, 90, 0.822);
-  height: 40px;
-  width: 150px;
+  width: 50%;
   border-radius: 50px;
   cursor: pointer;
-  font-size: 20px;  
+  font-size: calc(1.1rem + 0.390625vw);
   transition-duration: 0.4s;
-  margin-top: 20px;
- 
+  margin-top: 8%; 
 }
 
 .submit_button:hover{
@@ -61,17 +106,6 @@ body {
 
 .submit_button:active{
   opacity:0.2;
-}
-
-.register_link{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  margin-top: 40px;
-
 }
 
 a:visited,
@@ -83,10 +117,17 @@ a:hover {
   opacity:0.5;
 }
 
-.footer{
-  position: fixed;     
-  text-align: center;    
-  bottom: 10px; 
-  width: 100%;
+.footer > span{  
+  position: absolute;
+  bottom: 1%;
+  left: 20%;
+  right: 20%;
   color: #552200;
+  font-size: calc(11px + 0.390625vw);
+}
+
+@media (max-width:300px){
+  .register_link > a{
+    padding-top: 2%;
+  }
 }

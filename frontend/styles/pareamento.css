@@ -1,0 +1,64 @@
+.info{
+  /* background-color: green; */
+  margin-top: 50px;
+  text-align: left;
+  margin-left: 40px;
+  margin-right: 40px;
+  color: #552200;
+}
+
+.logo{
+  height: 180px;
+  margin-top: 20px;
+}
+
+.info > .text{  
+  margin-top: -50px;
+  text-align: justify;
+  font-size: 18px;
+}
+
+.forms{
+  margin-top: 50px;
+}
+.input {
+  margin: 5px;
+  font-size: 20px;
+  border-radius: 5px;
+  background-color: rgba(221, 204, 128, 0.822);
+  height: 40px;
+  width: 500px;
+  border: 2px solid rgba(173, 158, 90, 0.822);
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #552200;
+  opacity: 0.4; /* Firefox */
+}
+
+.buttonHolder{
+  text-align: center;
+}
+
+.submit_button {
+  font-weight: 600;  
+  background-color: rgba(221, 204, 128, 0.822);
+  color: #552200;
+  border: 2px solid rgba(173, 158, 90, 0.822);
+  height: 40px;
+  width: 150px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 20px;  
+  transition-duration: 0.4s;
+  margin-top: 20px;
+ 
+}
+
+.submit_button:hover{
+  opacity:0.7;
+}
+
+.submit_button:active{
+  opacity:0.2;
+}
