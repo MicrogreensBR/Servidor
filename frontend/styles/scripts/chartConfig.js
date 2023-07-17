@@ -42,7 +42,7 @@ var chartTemperature;
             }
           },
           y: {
-            ticks: {
+            ticks: {                  
               color: ["rgba(85, 34, 0, 1)",],  
             }
           }
@@ -84,7 +84,7 @@ var chartTemperature;
             }
           },
           y: {
-            ticks: {
+            ticks: {             
               color: ["rgba(85, 34, 0, 1)",],  
             }
           }

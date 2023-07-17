@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 
-{% block styles %}
-  <link rel="stylesheet" href="styles/dashboard.css"> 
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+{% block styles %}  
+<link rel="stylesheet" href="styles/dashboard.css"> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
 {% endblock %}
 
 {% block main %}
@@ -35,6 +34,26 @@
       </div>
     </div>
   </div>
+
+  <div class="controle">
+    <div class="title_controle">Colheita</div>
+    {% if not esp_cultivo.status_plantar %}
+    <div class="menu">
+      <div class="instru">Assim que for realizado o plantio das sementes, confirme que está tudo pronto para que {{ esp.name_esp }} possa te informar quando colher seus microverdes!</div>
+      <a class="botao_box" onclick="publishMQTT('plantado')"><div class="botao">CONFIRMAR PLANTIO</div></a>
+    </div>
+    {% else %}
+    <div class="menu">
+      {% if not esp_cultivo.status_colheita %}
+      <div class="info_status">𝗦𝘁𝗮𝘁𝘂𝘀:<span class="status waiting"></span></div> 
+      Microverdes crescendo firmes e fortes...        
+      {% else %}
+      <div class="info_status">𝗦𝘁𝗮𝘁𝘂𝘀:<span class="status colher"></span></div>  
+      Você já pode colher e aproveitar seus microverdes! 
+      {% endif %}
+    </div>
+    {% endif %}   
+  </div>
   
   <div class="chartbox">
     <div class="chartbox_child">
@@ -44,25 +63,31 @@
       <canvas id="chart2"></canvas>
     </div>
   </div>
-
+  
   <div class="controle">
-    <div class="title"> Painel de controle</div>
+    <div class="title_controle"> Painel de controle</div>
     <div class="menu">
       <a class="botao_box" onclick="publishMQTT('irrigar')"><div class="botao">IRRIGAR</div></a>
       <a class="botao_box" onclick="publishMQTT('iluminar')"><div class="botao">ILUMINAR</div></a>
       <a class="botao_box" onclick="publishMQTT('ventilar')"><div class="botao">VENTILAR</div></a>    
+      <a class="botao_box" onclick="confirmation()"><div class="botao">ENCERRAR</div></a>    
     </div>
   </div>
 
   <div class="footer"></div>
-
-
 {% endblock %}
 
 {% block scriptjs %}
+<script>  
+  function confirmation(){
+  if (confirm("Tem certeza que deseja encerrar o cultivo?") == true) {
+    $.get('/encerrar/'.concat("{{ esp.cod_esp }}"));
+    setTimeout(function(){$(location).attr('href', '/list');}, 1); 
+  } 
+}
+</script>
 <script>
   // CONFIGURAÇÃO INICIAL
-
   var aTags = document.getElementsByClassName("botao_box");
   var ltstatus = ["{{ esp_cultivo.status_irrigar }}","{{ esp_cultivo.status_iluminar }}","{{ esp_cultivo.status_ventilar }}"];
  
@@ -75,9 +100,13 @@
     }
   }
 </script>
-<script>
-    
+<script>    
   function publishMQTT(cmd) {
+    if(cmd == "plantado"){
+      $.get('/publish/'.concat("{{ esp.cod_esp }}", "/", "{{ esp_cultivo.min_days_harvest }}"));  
+      location.reload();
+      return 0;
+    }
 
     var aTags = document.getElementsByTagName("a");
     var found;
@@ -87,8 +116,8 @@
         found = aTags[i];
         break;
       }
-    }
-     
+    }    
+    
     $.get('/publish/'.concat("{{ esp.cod_esp }}", "/", cmd));  
 
     found_bc = window.getComputedStyle(found.firstChild,null).getPropertyValue('background-color');  
@@ -99,35 +128,73 @@
     else {      
       found.firstChild.style.backgroundColor = 'rgb(212, 212, 212)';
     }
-
   }
 </script>
 
 <script type="text/javascript" src="styles/scripts/chartConfig.js"></script>
 
 <script> 
-
   const MAX_DATA_COUNT = 20;
-  
-  function requestData() {
+  const COD_ESP = "{{ esp.cod_esp }}"; 
 
-    var requests = $.get('/data');    
+  function requestData() {
+    
+    var requests = $.get('/data/' + COD_ESP);    
     
     var tm = requests.done(function(results) {      
 
-      if (chartTemperature.data.labels.length > MAX_DATA_COUNT) {
-        removeFirstData(chartTemperature);
+      for(var i=0; i < results.length; i++){
+        results[i].reverse();
+      }     
+      
+      if (chartTemperature.data.labels.length == 0){
+        for(var i=0; i < results[0].length; i++){        
+          addData(chartTemperature, results[0][i], results[1][i]);          
+        }
       }
-      addData(chartTemperature, results[0], results[1]);
+      else{
+        if(chartTemperature.data.labels.slice(-1)[0] != results[0].slice(-1)[0]){
+          if (chartTemperature.data.labels.length > MAX_DATA_COUNT) {
+            removeFirstData(chartTemperature);
+          }         
+          addData(chartTemperature, results[0].slice(-1)[0], results[1].slice(-1)[0]);
+        }
+      }    
 
-      if (chartUmidade.data.labels.length > MAX_DATA_COUNT) {
-        removeFirstData(chartUmidade);
+      if (chartUmidade.data.labels.length == 0){
+        for(var i=0; i < results[0].length; i++){        
+          addData(chartUmidade, results[0][i], results[3][i]);          
+        }
+      }
+      else{
+        if(chartUmidade.data.labels.slice(-1)[0] != results[0].slice(-1)[0]){
+          if (chartUmidade.data.labels.length > MAX_DATA_COUNT) {
+            removeFirstData(chartUmidade);
+          }
+         
+          addData(chartUmidade, results[0].slice(-1)[0], results[3].slice(-1)[0]);
+        }
       }         
-      addData(chartUmidade, results[0], results[2]);
 
-      document.getElementById('temperatura').innerHTML = Math.round(results[1]) + " °C"
-      document.getElementById('umidade').innerHTML = Math.round(results[2]) + "%"
-      document.getElementById('altura').innerHTML = Math.round(results[3]) + " cm"
+      if(results[1].slice(-1)[0] === undefined){
+        document.getElementById('temperatura').innerHTML = "-";       
+      }
+      else{
+        document.getElementById('temperatura').innerHTML = Math.round(results[1].slice(-1)[0]) + " °C";
+      }
+
+      if(results[1].slice(-1)[0] === undefined){
+        document.getElementById('umidade').innerHTML = "-";       
+      }
+      else{
+        document.getElementById('umidade').innerHTML = Math.round(results[3].slice(-1)[0]) + " %";
+      }
+      if(results[1].slice(-1)[0] === undefined){
+        document.getElementById('altura').innerHTML = "-";       
+      }      
+      else{
+        document.getElementById('altura').innerHTML = Math.round(results[2].slice(-1)[0]) + " cm";
+      }    
 
       setTimeout(requestData, 2000);
     });

@@ -1,26 +1,20 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
   <head>        
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+      
     <title>Babygreens</title>   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="styles/base.css">
     {% block styles %}
     {% endblock %}
   </head>  
-
-  <script type="text/javascript">
-    {% block scriptjs1 %}
-    {% endblock %}
-  </script>
-
   <body>  
-    <nav class="menu_lateral">
+    <nav class="menu_lateral_desktop">     
       <div class="btn_expandir">
         <i class="bi bi-list"></i>
-      </div>          
+      </div> 
       <ul>
         <li class="item_menu">
           <a href="#">
@@ -52,17 +46,58 @@
             <span class="txt_link">Logout</span>
           </a>
         </li>
-      </ul>
+      </ul>  
     </nav>  
     
+    <nav id="menu_lateral_mobile">     
+      <button id="btnMobile">        
+        <i class="bi bi-list"></i>
+        <span>Menu</span>
+      </button>
+
+      <ul>
+        <a href="#">
+          <li class="item_menu">          
+            <span class="icon"><i class="bi bi-person"></i></span>  
+            <span class="txt_link">Conta</span>         
+          </li>
+        </a>
+        <a href="/list">
+          <li class="item_menu">          
+            <span class="icon"><i class="bi bi-easel"></i></span>  
+            <span class="txt_link">Painel de controle</span>        
+          </li>
+        </a>
+        <a href="/pair">
+          <li class="item_menu">          
+            <span class="icon"><i class="bi bi-wifi"></i></span>  
+            <span class="txt_link">Parear sistema</span>          
+          </li>
+        </a>
+        <a href="#">
+          <li class="item_menu">          
+            <span class="icon"><i class="bi bi-exclamation-triangle"></i></span>  
+            <span class="txt_link">Relatar problema</span>          
+          </li>
+        </a>
+        <a href="/logout">
+          <li class="item_menu">        
+            <span class="icon"><i class="bi bi-box-arrow-right"></i></span>  
+            <span class="txt_link">Logout</span>         
+          </li>
+        </a>
+      </ul>      
+    </nav>
+
     <div class="main">
       {% block main %}
       {% endblock %}  
-    </div>
-  
+    </div>   
   </body>
-   
-{% block scriptjs %}
-{% endblock %}
+
+  <script type="text/javascript" src="styles/scripts/toggleMenu.js"></script>
+
+  {% block scriptjs %}
+  {% endblock %}
 
 </html>

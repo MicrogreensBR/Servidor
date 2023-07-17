@@ -1,30 +1,3 @@
-{% extends "base.html" %}
-
-{% block styles %}
-<link rel="stylesheet" href="styles/dashboardAdd.css">
-{% endblock %}
-
-{% block main %}
-<div class="header">
-  <div class="title">Começando um novo cultivo?</div>
-  <div class="info">
-    <p>Escolha uma das opções de microverdes disponíveis que pretende plantar para melhorar a experiência de supervisão:</p>
-  </div>
-</div>
-<div class="body1" id="body1">
-  <div class="select" id="select">   
-    <select name="microgreens" id="microgreens" onchange="func()">
-        <option selected disabled>Tipo de semente</option>
-      {% for microgreen in datasheet %}
-        <option value="{{microgreen.id}}">{{microgreen.seed_type}}</option>
-      {% endfor %}     
-    </select>     
-  </div>   
-</div>
-{% endblock %}
-
-{% block scriptjs %} 
-<script>
 var x = window.matchMedia("(max-width: 600px)")
 
 function insertAfter(referenceNode, newNode) {
@@ -410,6 +383,4 @@ function func() {
 
     }
   }); 
-}  
-</script>
-{% endblock %}
+}

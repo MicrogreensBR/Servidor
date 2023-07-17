@@ -2,8 +2,14 @@
 
 {% block styles %}
 <link rel="stylesheet" href="styles/dashboardWaiting.css">
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 {% endblock %}
 
 {% block main %}
-<p>Esperando o tempo de embebição terminar</p> 
+<div class="screen">
+    <p>Esperando tempo de embebição terminar...</p> 
+    <div class="container">
+        <lottie-player class="lottie" src="https://assets1.lottiefiles.com/packages/lf20_hocmonst.json" mode="bounce" background="transparent" speed="1" loop autoplay></lottie-player>
+    </div>
+</div>
 {% endblock %}

@@ -1,91 +1,175 @@
-body {
+body{
   background-color: rgba(250, 233, 157, 0.822);
-  font-family: 'Open Sans', sans-serif;
-}
-
-.title_form{
-  display: block; 
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-}
-
-.logo{
-  height: 100px;
-  display: block; 
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-}
-
-.title_form{
-  display: block; 
-  width: 100%;
-  text-align: center; 
-  font-size: 20px;
-  font-weight: 600;  
-  color: #552200;
-}  
-
-.register_form{
-  display: flex;
-  justify-content: center;
-
-  align-items: center;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5px;
-  position: relative;
-}
-
-.input {
-  display:block;
-  margin: 5px;
-  font-size: 20px;
-  border-radius: 5px;
-  background-color: rgba(221, 204, 128, 0.822);
-  height: 40px;
-  width: 300px;
-  border: 2px solid rgba(173, 158, 90, 0.822);
-  
-}
-
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #552200;
-  opacity: 0.4; /* Firefox */
-}
-
-.buttonHolder{
+  font-family: 'Open Sans', sans-serif;    
   text-align: center;
 }
 
-.submit_button {
-  font-weight: 600;  
-  background-color: rgba(221, 204, 128, 0.822);
-  color: #552200;
-  border: 2px solid rgba(173, 158, 90, 0.822);
-  height: 40px;
-  width: 150px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 20px;  
-  transition-duration: 0.4s;
-  margin-top: 20px;
- 
+/* MOBILE */
+@media all and (max-width: 600px){  
+  .logo{
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;   
+  }
+
+  .title_form{  
+    display: block; 
+    width: 100%;      
+    font-size: 1.2rem;
+    font-weight: 600;  
+    color: #552200;
+  }  
+
+  .register_form{
+    display: flex;
+    width: 100%;    
+    justify-content: center;
+    align-items: center; 
+    margin-top: 0.5rem;
+    position: relative;
+  }
+
+  .register_form > form{
+    width: 70%;
+  }
+
+  .input {
+    display:block;
+    margin: 0.2rem;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    background-color: rgba(221, 204, 128, 0.822);
+    height: 2.1rem;
+    width: 100%;
+    border: 2px solid rgba(173, 158, 90, 0.822);
+    
+  }
+
+  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #552200;
+    opacity: 0.4; /* Firefox */
+  }
+
+  .buttonHolder{
+    text-align: center;
+  }
+
+  .submit_button {
+    font-weight: 600;  
+    background-color: rgba(221, 204, 128, 0.822);
+    color: #552200;
+    border: 2px solid rgba(173, 158, 90, 0.822);
+    height: 40px;
+    width: 9rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1.2rem;  
+    transition-duration: 0.4s;
+    margin-top: 20px;
+
+  }
+
+  .submit_button:hover{
+    opacity:0.7;
+  }
+
+  .submit_button:active{
+    opacity:0.2;
+  }
+
+  .footer{
+    position: fixed;     
+    text-align: center; 
+    font-size: 0.9rem;   
+    bottom: 10px; 
+    width: 100%;
+    color: #552200;
+  }
 }
 
-.submit_button:hover{
-  opacity:0.7;
-}
+/* DESKTOP */
+@media all and (min-width: 601px){ 
+  .logo{
+    width: 12%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;   
+  }
 
-.submit_button:active{
-  opacity:0.2;
-}
+  .title_form{  
+    display: block; 
+    width: 100%;  
+    height: 90%;
+    font-size: 1.4rem;
+    font-weight: 600;  
+    color: #552200;
+  }  
 
-.footer{
-  position: fixed;     
-  text-align: center;    
-  bottom: 10px; 
-  width: 100%;
-  color: #552200;
+  .register_form{
+    display: flex;
+    width: 100%;
+    height: 90%;
+    justify-content: center;
+    align-items: center; 
+    margin-top: 0.9rem;
+    position: relative;
+  }
+
+  .register_form > form{
+    width: 30%;
+  }
+  
+  .input {
+    display:block;
+    margin: 0.2rem;
+    font-size: 1.3rem;
+    border-radius: 5px;
+    background-color: rgba(221, 204, 128, 0.822);
+    height: 2.5rem;
+    width: 100%;
+    border: 2px solid rgba(173, 158, 90, 0.822);
+    
+  }
+
+  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #552200;
+    opacity: 0.4; /* Firefox */
+  }
+
+  .buttonHolder{
+    text-align: center;
+  }
+
+  .submit_button {
+    font-weight: 600;  
+    background-color: rgba(221, 204, 128, 0.822);
+    color: #552200;
+    border: 2px solid rgba(173, 158, 90, 0.822);
+    height: 40px;
+    width: 150px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 20px;  
+    transition-duration: 0.4s;
+    margin-top: 20px;
+
+  }
+
+  .submit_button:hover{
+    opacity:0.7;
+  }
+
+  .submit_button:active{
+    opacity:0.2;
+  }
+
+  .footer{
+    position: fixed;     
+    text-align: center;    
+    bottom: 10px; 
+    width: 100%;
+    color: #552200;
+  }
+
 }

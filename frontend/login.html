@@ -1,34 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Login</title>            
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles/login.css" media="screen">   
-      </head>
-    <body>
-      <div class="screen">
-        <div class="logo">
-          <img src="styles/imgs/logo.svg">
-      </div>
-      <div class="menu">       
-        <div class="errorMSG">{{error}}</div>        
-        <div class="login_form">
-          <form action="/login" method="post">
-            <input class="input" type="text" name='user' placeholder="Usuário"><br> 
-            <input class="input" type="password" name='password' placeholder="Senha"><br> 
-            <div class="buttonHolder">
-              <input class='submit_button' type="submit" value="Entrar">
-            </div>            
-          </form>
-        </div>        
-        <div class="register_link">
-          <a href="cadastro">Ainda não está registrado?</a>
-          <a href="#">Esqueceu a senha?</a>
-        </div>         
-        <footer class="footer">
-            <span>Universidade de São Paulo, USP © 2023</span> 
-        </footer>
-      </div>
-    </body>    
+<head>
+    <title>Login</title>            
+    <meta charset="UTF-8">
+    <link rel="icon" href="styles/imgs/logo.svg"></link>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/login.css" media="screen">   
+  </head>
+<body>
+  <div class="screen">
+    <div class="logo">
+      <img src="styles/imgs/logo.svg">
+  </div>
+  <div class="menu"> 
+    <div class="errorMSG">{{error}}</div>        
+    <div class="login_form">
+      <form action="/login" method="post">
+        <input class="input" type="text" name='user' placeholder="Usuário"><br> 
+        <input class="input" type="password" name='password' placeholder="Senha"><br> 
+        <div class="buttonHolder">
+          <input class='submit_button' type="submit" value="Entrar">
+        </div>            
+      </form>
+    </div>        
+    <div class="register_link">
+      <a href="cadastro">Ainda não está registrado?</a>
+      <a href="#">Esqueceu a senha?</a>
+    </div>         
+    <footer class="footer">
+        <span>Universidade de São Paulo, USP © 2023</span> 
+    </footer>
+  </div>
+</body>      
 </html>
+

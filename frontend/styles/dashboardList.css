@@ -1,129 +1,263 @@
-
-.header{
-  color: #552200;
-  font-size: 30px;
-  margin-top: 20px;
-  margin-left: 30px;
-  text-align: left;
-  font-weight: 700;  
-}
-
-.lista{
-  padding-top: 20px;
-  text-align: left;
-  margin-left: 30px;
-  margin-right: 30px;
-}
-
-.lista a{
-  text-decoration: none;
-}
-
-.ficha{
-  background-color: rgb(255, 246, 208);
-  border-radius: 7px;
-  margin-bottom: 20px;
-  border: 2px solid #552200;
-  cursor: pointer;
-  transition: 0.4s;
-}
-
-.ficha:hover{
-  box-shadow: 3px 3px #552200;
-  opacity: 0.9;
-}
-
-.name{ 
-  font-size: 25px;
-  color: #552200;
-  font-weight: 600;
-  padding-top: 10px;
-  padding-left: 10px;
-}
-
-.code{ 
-  color: #552200;
-  font-size: 12px;
-  padding-left: 10px;
-  padding-top: 5px;
-  padding-bottom: 20px;
-}
-
-.foot{
-  font-size: 15px; 
-  padding-bottom: 30px;
-}
-.seed{
-  float: left;
-  text-align: left;
-  padding-left: 10px;   
-  color: #552200;
-}
-
-.info_status{ 
-  float: right;
-  text-align: right; 
-  padding-right: 20px;
-  color: #552200;
-}
-.status{
-  position: relative;
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  margin-left: 10px;
-  margin-bottom: -3px;
- 
-  &.online, &.online:before {
-    background: rgb(79, 219, 79);
+@media all and (min-width: 601px){ 
+  .header{
+    color: #552200;
+    font-size: 30px;
+    margin-top: 20px;
+    margin-left: 30px;
+    text-align: left;
+    font-weight: 700;  
   }
-
-  &.waiting, &.waiting:before {
-    background: yellow;
+  
+  .lista{
+    padding-top: 20px;
+    text-align: left;
+    margin-left: 30px;
+    margin-right: 30px;
   }
-
-  &.offline, &.offline:before {
-    background: rgb(255, 0, 0);
+  
+  .lista a{
+    text-decoration: none;
   }
-
-  &:before {
-    content: '';
-    display: block;
-    position: absolute;
-    left: -5px;
-    top: -5px;
-    width: 25px;
-    height: 25px;
+  
+  .ficha{
+    background-color: rgb(255, 246, 208);
+    border-radius: 7px;
+    margin-bottom: 20px;
+    border: 2px solid #552200;
+    cursor: pointer;
+    transition: 0.4s;
+  }
+  
+  .ficha:hover{
+    box-shadow: 3px 3px #552200;
+    opacity: 0.9;
+  }
+  
+  .name{ 
+    font-size: 25px;
+    color: #552200;
+    font-weight: 600;
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+  
+  .code{ 
+    color: #552200;
+    font-size: 12px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 20px;
+  }
+  
+  .foot{
+    font-size: 15px; 
+    padding-bottom: 30px;
+  }
+  .seed{
+    float: left;
+    text-align: left;
+    padding-left: 10px;   
+    color: #552200;
+  }
+  
+  .info_status{ 
+    float: right;
+    text-align: right; 
+    padding-right: 20px;
+    color: #552200;
+  }
+  .status{
+    position: relative;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
-    animation: pulse 1.5s infinite ease-in;
+    margin-left: 10px;
+    margin-bottom: -3px;
+   
+    &.online, &.online:before {
+      background: rgb(79, 219, 79);
+    }
+  
+    &.waiting, &.waiting:before {
+      background: yellow;
+    }
+  
+    &.offline, &.offline:before {
+      background: rgb(255, 0, 0);
+    }
+  
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: -5px;
+      top: -5px;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite ease-in;
+    }
+  }
+  
+  @keyframes pulse {
+    from {
+      transform: scale(0.5);
+      opacity: 1;
+    }
+  
+    to {
+      transform: scale(1.4);
+      opacity: 0;
+    }
+  }
+  
+  .mensagem{
+    text-align: center;
+    background-color: rgb(255, 246, 208);
+  }
+  
+  .text{
+    font-size: 35px;
+    color: rgba(121,175,43,255);
+    font-weight: 600;
+    text-shadow: 2px 2px #000000;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border: 2px solid #552200;
+    border-radius: 7px;
   }
 }
-
-@keyframes pulse {
-  from {
-    transform: scale(0.5);
-    opacity: 1;
+@media all and (max-width: 600px){ 
+  .header{
+    color: #552200;
+    font-size: 1.85rem;
+    margin-top: 8%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-weight: 700;  
+  }
+  
+  .lista{
+    padding-top: 8%;
+    text-align: center;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  
+  .lista a{
+    text-decoration: none;
+  }
+  
+  .ficha{
+    background-color: rgb(255, 246, 208);
+    border-radius: 7px;
+    margin-bottom: 20px;
+    border: 2px solid #552200;
+    cursor: pointer;
+    transition: 0.4s;
+  }
+  
+  .ficha:hover{
+    box-shadow: 3px 3px #552200;
+    opacity: 0.9;
+  }
+  
+  .name{ 
+    font-size: 1.5rem;
+    color: #552200;
+    font-weight: 600;
+    padding-top: 5%;   
+  }
+  
+  .code{ 
+    color: #552200;
+    font-size: 0.8rem;    
+    padding-top: 3%;
+    padding-bottom: 8%;
+  }
+  
+  .foot{
+    font-size: 0.9rem; 
+    padding-bottom: 9%;
   }
 
-  to {
-    transform: scale(1.4);
-    opacity: 0;
+  .seed{
+    float: left;
+    text-align: left;
+    padding-left: 5%;   
+    color: #552200;
   }
-}
+  
+  .info_status{ 
+    float: right;
+    text-align: right; 
+    padding-right: 5%;
+    color: #552200;
+  }
 
-.mensagem{
-  text-align: center;
-  background-color: rgb(255, 246, 208);
-}
-
-.text{
-  font-size: 35px;
-  color: rgba(121,175,43,255);
-  font-weight: 600;
-  text-shadow: 2px 2px #000000;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border: 2px solid #552200;
-  border-radius: 7px;
+  .status{
+    position: relative;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-left: 10px;
+    margin-bottom: -3px;
+   
+    &.online, &.online:before {
+      background: rgb(79, 219, 79);
+    }
+  
+    &.waiting, &.waiting:before {
+      background: yellow;
+    }
+  
+    &.offline, &.offline:before {
+      background: rgb(255, 0, 0);
+    }
+  
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: -5px;
+      top: -5px;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite ease-in;
+    }
+  }
+  
+  @keyframes pulse {
+    from {
+      transform: scale(0.5);
+      opacity: 1;
+    }
+  
+    to {
+      transform: scale(1.4);
+      opacity: 0;
+    }
+  }
+  
+  .mensagem{
+    text-align: center;
+    background-color: rgb(255, 246, 208);
+  }
+  
+  .text{
+    font-size: 2rem;
+    color: rgba(121,175,43,255);
+    font-weight: 600;
+    text-shadow: 2px 2px #000000;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    border: 2px solid #552200;
+    border-radius: 7px;
+  }
 }

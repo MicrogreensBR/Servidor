@@ -1,76 +1,161 @@
-.title{
-  color: #552200;
-  font-size: 30px;
-  margin-top: 20px;
-  margin-left: 30px;
-  text-align: left;
-  font-weight: 700;  
+/* DESKTOP */
+@media all and (min-width: 601px){ 
+  .title{
+    color: #552200;
+    font-size: 30px;
+    margin-top: 20px;
+    margin-left: 30px;
+    text-align: left;
+    font-weight: 700;  
+  }
+  
+  .info{
+    color: #552200;
+    text-align: justify;
+    margin-left: 30px;
+    padding-top: 20px;
+  }
+  
+  .body1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 25px;
+  }
+  
+  select {  
+    -webkit-appearance: none;  
+    -moz-appearance: none;  
+    -ms-appearance: none;  
+    appearance: none;
+    outline: 0;  
+    box-shadow: none;
+    border:0!important;
+    background:rgba(252, 234, 157, 0.822);
+    background-image:none;  
+   }
+  
+   select::-ms-expand{
+    display: none;
+  }
+  
+  .select{
+    position: relative;
+    display: flex;
+    width: 400px;
+    height: 50px;
+    line-height: 3;
+    background: #552200;
+    overflow: hidden;
+    border-radius: 5px;
+    border: 2px solid #552200;
+  }
+  
+  select{
+    flex: 1;
+    padding: 0 10px;
+    color:  #552200;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 20px;
+  }
+  
+  .select::after{
+    content: '\25BC';
+    position:absolute;
+    top:0;
+    right:0;
+    padding: 1px 20px;
+    cursor: pointer;
+    pointer-events: none;
+    transition: 0.25s all ease;
+    background: rgb(109, 56, 21);
+  }
+  
+  .select:hover::after{
+    color:#fff
+  }
+  
+
 }
 
-.info{
-  color: #552200;
-  text-align: justify;
-  margin-left: 30px;
-  padding-top: 20px;
-}
+/* MOBILE */
+@media all and (max-width: 600px){ 
+  .title{
+    color: #552200;
+    font-size: 1.6rem;
+    margin-top: 1.5rem;
+    text-align: center;
+    font-weight: 700;  
+  }
 
-.body1{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 25px;
-}
+  .info{
+    color: #552200;
+    text-align: center;
+    padding-top: 1.5rem;
+    margin-left: 0.6rem;
+    margin-right: 0.6rem;
+  }
 
-select {  
-  -webkit-appearance: none;  
-  -moz-appearance: none;  
-  -ms-appearance: none;  
-  appearance: none;
-  outline: 0;  
-  box-shadow: none;
-  border:0!important;
-  background:rgba(252, 234, 157, 0.822);
-  background-image:none;  
- }
+  .body1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1.5rem;
+  }
 
- select::-ms-expand{
-  display: none;
-}
+  select {  
+    -webkit-appearance: none;  
+    -moz-appearance: none;  
+    -ms-appearance: none;  
+    appearance: none;
+    outline: 0;  
+    box-shadow: none;
+    border:0!important;
+    background:rgba(252, 234, 157, 0.822);
+    background-image:none;  
+  }
 
-.select{
-  position: relative;
-  display: flex;
-  width: 400px;
-  height: 50px;
-  line-height: 3;
-  background: #552200;
-  overflow: hidden;
-  border-radius: 5px;
-  border: 2px solid #552200;
-}
+  select::-ms-expand{
+    display: none;
+  }
 
-select{
-  flex: 1;
-  padding: 0 10px;
-  color:  #552200;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 20px;
-}
+  .select{
+    position: relative;
+    display: flex;
+    width: 75%;
+    height: 3rem;
+    line-height: 3;
+    background: #552200;
+    overflow: hidden;
+    border-radius: 5px;
+    border: 2px solid #552200;
+  }
 
-.select::after{
-  content: '\25BC';
-  position:absolute;
-  top:0;
-  right:0;
-  padding: 1px 20px;
-  cursor: pointer;
-  pointer-events: none;
-  transition: 0.25s all ease;
-  background: rgb(109, 56, 21);
-}
+  select{
+    flex: 1;
+    padding: 0 10px;
+    color:  #552200;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.1rem;
+  }
 
-.select:hover::after{
-  color:#fff
+  .select::after{
+    content: '\25BC';
+    position:absolute;
+    top:0;
+    right:0;
+    padding: 1px 20px;
+    cursor: pointer;
+    pointer-events: none;
+    transition: 0.25s all ease;
+    background: rgb(109, 56, 21);
+  }
+
+  .select:hover::after{
+    color:#fff
+  }
 }

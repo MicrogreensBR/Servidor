@@ -6,83 +6,171 @@
   font-weight: 400; 
 }
 
-body{
-  background-color: rgba(250, 233, 157, 0.822);  
-  height: 100vh; 
-}
+@media all and (min-width: 601px){   
+  body{
+    background-color: rgba(250, 233, 157, 0.822);  
+    height: 100vh;     
+    margin:0;
+    padding:0;
+  }
 
-nav.menu_lateral{
-  width: 80px; 
-  height:100%;
-  background-color: rgba(173, 158, 90, 0.822);
-  padding: 40px 0 40px 1%;  
-  box-shadow: 3px 0 0 #552200;
-  position: fixed ;
-  top:0;
-  left:0;
-  overflow: hidden;
-  transition: 0.3s;
-  right:auto;
-}
+  body::-webkit-scrollbar{
+    width:0.3rem;
+  }
 
-nav.menu_lateral:hover{
-  width: 300px;  
-}
+  body::-webkit-scrollbar-track{
+    background: rgba(250, 233, 157, 0.822);
+  }
 
-nav.menu_lateral:hover ~ .main{
-  margin-left: 300px;
-}
+  body::-webkit-scrollbar-thumb{
+    background: #552200;
+  }
 
-.btn_expandir{
-  width: 100%;
-  padding-left: 15px;  
-  margin-bottom: 10px;
-}
-
-.btn_expandir > i{
-  color: #552200;  
-  font-size: 24px;
-  cursor: pointer;
-}
-
-ul{
-  height: 100%;
-  list-style-type: none;  
+  nav.menu_lateral_desktop{
+    width: 5.1rem; 
+    height:100vh;
+    background-color: rgba(173, 158, 90, 0.822);
+    padding: 3rem 0 3rem 0.65rem;  
+    box-shadow: 0.2rem 0 0 #552200;
+    position: fixed ;
+    top:0;
+    left:0;
+    overflow: hidden;
+    transition: 0.3s;
+    right:auto;
+  }
   
+  nav.menu_lateral_desktop:hover{
+    width: 20rem;  
+  }
+  
+  nav.menu_lateral_desktop:hover ~ .main{
+    margin-left: 20rem;
+  }
+  
+  .btn_expandir{
+    width: 100%;
+    padding-left: 1rem;  
+    margin-bottom: 0.85rem;
+  }
+  
+  .btn_expandir > i{
+    color: #552200;  
+    font-size: 1.6rem;
+    cursor: pointer;
+  }
+  
+  ul{
+    height: 100%;
+    list-style-type: none;      
+  }
+  
+  ul li.item_menu a{
+    color: #552200;  
+    text-decoration: none;
+    font-size: 1.4rem;
+    padding: 1.2rem 4%;  
+    display: flex;  
+    margin-bottom: 1.6rem;
+    line-height: 1.85rem;
+  }
+  
+  ul li.item_menu{
+    transition: 0.4s;
+  } 
+  ul li.item_menu:hover{
+    background-color: rgba(241, 228, 167, 0.822);
+    opacity:0.8
+  } 
+  
+  ul li.item_menu a .txt_link{
+    margin-left: 2rem;
+    white-space: nowrap;
+  }
+  
+  ul li.item_menu a .icon > i{
+    font-size: 30px;
+    margin-left: 10px;
+  }
+  
+  .main{
+    transition: 0.3s;
+    height: 100vh;
+    margin-left: 5.1rem;    
+    text-align: center;
+  }  
+ 
+  #menu_lateral_mobile{
+    display: None;
+  }
 }
 
-ul li.item_menu a{
-  color: #552200;  
-  text-decoration: none;
-  font-size: 20px;
-  padding: 20px 4%;  
-  display: flex;  
-  margin-bottom: 20px;
-  line-height: 30px;
+@media all and (max-width:600px){ 
+  body{
+    background-color: rgba(250, 233, 157, 0.822);  
+    height: 100%;
+    width: 100vw;    
+  }
+
+  nav.menu_lateral_desktop{
+    display: none ;
+  }
+
+  #menu_lateral_mobile{
+    display: block;
+    text-align: center;
+    background-color: rgba(173, 158, 90, 0.822); 
+    box-shadow: 0 0.12rem 0 #552200;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+  }  
+
+  #menu_lateral_mobile > button{
+    color: #552200;  
+    font-size: 1.5rem;
+    cursor: pointer;      
+    background-color: transparent;
+    border: none;
+  }
+
+  #menu_lateral_mobile > ul{
+    display: none;
+  }
+
+  #menu_lateral_mobile.active > ul{
+    display: block;
+    height: 100vh;   
+    list-style-type: none;  
+    padding-top: 1rem;     
+  }
+  
+  #menu_lateral_mobile.active > ul > a{
+    display: block;   
+    color: #552200;      
+    text-decoration: none;
+    font-size: 1.5rem;   
+    padding-top: 1.2rem; 
+    padding-bottom: 1.2rem; 
+  }
+
+  #menu_lateral_mobile.active ul a:hover{
+    background-color: rgba(241, 228, 167, 0.822);
+    opacity:0.8
+  } 
+
+  .main{    
+    height: 100vh;    
+    text-align: center;
+  }  
 }
 
-ul li.item_menu{
-  transition: 0.4s;
-} 
-ul li.item_menu:hover{
-  background-color: rgba(241, 228, 167, 0.822);
-  opacity:0.8
-} 
 
-ul li.item_menu a .txt_link{
-  margin-left: 25px;
-  white-space: nowrap;
-}
 
-ul li.item_menu a .icon > i{
-  font-size: 30px;
-  margin-left: 10px;
-}
 
-.main{
-  transition: 0.3s;
-  height: 100vh;
-  margin-left: 80px;
-  text-align: center;
-}
+
+
+
+
+
+
 

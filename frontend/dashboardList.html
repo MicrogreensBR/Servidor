@@ -2,6 +2,7 @@
 
 {% block styles %}
 <link rel="stylesheet" href="styles/dashboardList.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 {% endblock %}
 
 {% block main %}
@@ -13,12 +14,12 @@
         <div class="ficha">
           <div class="name">{{ micro.name_esp }}</div>
           <div class="code">Código: {{ micro.cod_esp }}</div>  
-          {% if info_cultivo != None and info_cultivo.status_plantar %}   
+          {% if info_cultivo != None and info_cultivo.status_soaking %}   
             <div class="foot">
               <div class="seed">Cultivo: {{ info_cultivo.seed }}</div>      
               <div class="info_status">Status:<span class="status online"></span></div>   
             </div>     
-          {% elif info_cultivo != None and not info_cultivo.status_plantar %}    
+          {% elif info_cultivo != None and not info_cultivo.status_soaking %}    
             <div class="foot">
               <div class="seed">Cultivo: {{ info_cultivo.seed }}</div>      
               <div class="info_status">Status:<span class="status waiting"></span></div>   
@@ -37,4 +38,31 @@
    </div>    
    {% endif %}
   </div>
+{% endblock %}
+
+{% block scriptjs %}
+{% if micros != [] %}
+<script>
+  var statusInit;  
+  const cod_user = "{{ micros[0][0].cod_user }}";
+
+  var tm = $.get('/checkfinish/' + cod_user).done(function(resultsFirst) {
+    statusInit = resultsFirst;               
+  });     
+
+  function checkFinish(){   
+    var requests = $.get('/checkfinish/' + cod_user);
+
+    var tm = requests.done(function(results) {  
+      if (JSON.stringify(results) != JSON.stringify(statusInit)){     
+        location.reload();
+      };      
+
+      setTimeout(checkFinish, 30000);
+    });    
+  };  
+ 
+  checkFinish();
+</script>
+{% endif %}
 {% endblock %}

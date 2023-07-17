@@ -1,18 +1,21 @@
+# Bibliotecas 
 import os, datetime, sys, json
 from flask import Flask, jsonify, request, render_template, redirect, session, Response, make_response
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc, delete
 from flask_marshmallow import Marshmallow
 from flask_session import Session
 from flask_mqtt import Mqtt
+from twilio.rest import Client
 
-from random import random
-
-backdir = os.path.dirname(__file__)
-rootdir = os.path.dirname(backdir)
-frontdir = os.path.join(rootdir, "frontend")
-staticdir = os.path.join(frontdir, 'styles')
+# Endereços de arquivos e pastas
+backdir = os.path.dirname(__file__)   #Backend
+rootdir = os.path.dirname(backdir)    #Diretório raiz
+frontdir = os.path.join(rootdir, "frontend") #Frontend
+staticdir = os.path.join(frontdir, 'styles') #Diretório de templates, imagens, scripts
 
 ##########################################################################################################
+# APLICATIVO FLASK
 app = Flask(__name__, template_folder=frontdir, static_folder=staticdir)
 app.secret_key = b'\x05\xf1\xac\xde\x92\xba\xd2\xf6\x19\xd5\xf1\xd4'
 
@@ -21,7 +24,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
-# CONFIGURAÇÃO DO BANCO DE DADOS
+# CONFIGURAÇÃO DO BANCO DE DADOS SQLITE
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(backdir, 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -108,15 +111,21 @@ class CultivoESP32(db.Model):
     status_irrigar = db.Column(db.Boolean)
     status_iluminar = db.Column(db.Boolean)
     status_ventilar = db.Column(db.Boolean)
+    status_soaking = db.Column(db.Boolean)
     status_plantar = db.Column(db.Boolean)
+    status_colheita = db.Column(db.Boolean)
+    min_days_harvest = db.Column(db.Integer)          
 
-    def __init__(self, cod_esp, seed):
+    def __init__(self, cod_esp, seed, min_days_harvest):
         self.cod_esp = cod_esp
         self.seed = seed
         self.status_irrigar = False
         self.status_iluminar = False
         self.status_ventilar = False
+        self.status_soaking = False
         self.status_plantar = False
+        self.status_colheita = False
+        self.min_days_harvest = min_days_harvest
 
 # Tabela 6 (Dados de tipos de semente)
 class Datasheet(db.Model):
@@ -139,15 +148,6 @@ class Datasheet(db.Model):
         self.avg_harvest_height = avg_harvest_height
         self.min_days_harvest = min_days_harvest
         self.max_days_harvest = max_days_harvest
-
-# Para criar a base de dados, ir no terminal e fazer:
-# export FLASK_APP=app
-# flask shell
-# from app import db
-# db.create_all()
-# exit()    
-
-# Se quiser deletar tudo: db.drop_all()
 
 # SERIALIZAÇÃO DOS DADOS
 class DatasheetSchema(ma.SQLAlchemySchema):
@@ -173,35 +173,40 @@ def index():
     if request.method == 'GET':        
         return render_template('index.html')
 
-# Página de cadastro
+# Página de login
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return render_template('login.html')
-    if request.method == 'POST':      
-
+    if request.method == 'POST':    
+        # Entradas no formulário  
         username = request.form.get("user")
         user = Users.query.filter_by(username=username).first()
 
+        # Se usuário já adicionado na BD:
         if user:                
+            # Se senha correta:
             if user.password == request.form.get("password"):
+                # Variáveis de sessão utilizadas
                 session["username"] = username
                 session["firstname"] = user.first_name
                 session["cod_user"] = user.cod_user                  
             
-                return render_template('home.html')
+                return render_template('home.html')            
             else:
                 error = "Senha incorreta!"
-                return render_template('login.html', error=error)
+                return render_template('login.html', error=error)      
         else:
             error = "Usuário não encontrado!"
             return render_template('login.html', error=error)
 
+# Página de cadastro
 @app.route('/cadastro', methods=['GET','POST'])
 def register_new_user():
     if request.method == 'GET':
         return render_template('cadastro.html')
     if request.method == 'POST':           
+        # Entradas no formulário  
         first_name = request.form.get('firstname')        
         last_name = request.form.get('lastname')
         user_email = request.form.get('email')
@@ -210,6 +215,7 @@ def register_new_user():
         password = request.form.get('password')
         validate_password = request.form.get('validate_password')
         
+        # Notificações de erro
         if Users.query.filter_by(user_email=user_email).first():            
             error = "Email já cadastrado."
             return render_template('cadastro.html', error=error)
@@ -223,6 +229,7 @@ def register_new_user():
             error = "Senhas distintas foram digitadas."
             return render_template('cadastro.html', error=error)
         else:        
+            # Adiciona novo usuário a BD
             new_user = Users(first_name, last_name, user_email, user_phone, username, password)
 
             db.session.add(new_user)
@@ -230,7 +237,7 @@ def register_new_user():
         
             return redirect('/login')
 
-# Adicionar uma nova ESP32 fabricada à base de dados de produtos à venda
+# Rota auxiliar: adicionar uma nova ESP32 fabricada à base de dados de produtos à venda
 @app.route('/add/esp/<int:cod_esp>', methods = ['GET'])
 def add_new_esp32(cod_esp):      
     if not ESP32.query.filter_by(cod_esp=cod_esp).first():      
@@ -242,14 +249,6 @@ def add_new_esp32(cod_esp):
         return "ESP32 adicionada com sucesso!"
     else:
         return Response(status=204)
-
-@app.route('/visualize/<int:cod_esp>', methods = ['GET'])
-def visualize(cod_esp):    
-      esp_list = Dados_ESP32.query.filter_by(cod_esp=cod_esp).all()
-      
-      data = [[esp.temperatura, esp.altura, esp.umidade] for esp in esp_list]
-          
-      return str(data)    
 
 # Parear modelo de ESP32 adquirido pelo usuário
 @app.route('/pair', methods = ['GET','POST'])
@@ -272,12 +271,13 @@ def pair_esp32_to_user():
             
             db.create_all() 
    
-            error = 'Sistema pareado com sucesso'
+            error = 'Sistema pareado com sucesso!'
             return render_template("pareamento.html", error=error)        
         else:
-            error = 'Código incorreto ou não existente.'
+            error = 'Código incorreto ou não existente!'
             return render_template("pareamento.html", error=error)
 
+# Lista de microcontroladores do usuário (Painel de controle)
 @app.route('/list', methods=['GET'])
 def choose_micro():
     if request.method == 'GET':        
@@ -290,16 +290,20 @@ def choose_micro():
   
         return render_template('dashboardList.html', micros=aux)
 
+# Painel de controle (Requisição HTTP para cada cód. ESP)
 @app.route('/dashboard')
 def dashboard():
     cod_esp = request.args.get('cod')
     if cod_esp:               
         info_cultivo = CultivoESP32.query.filter_by(cod_esp=cod_esp).first()
        
-        if info_cultivo == None:            
+        # Adicionar novo cultivo 
+        if info_cultivo == None:                        
             return render_template("dashboardAdd.html", datasheet=Datasheet.query.all(), cod_esp=cod_esp)
-        elif not info_cultivo.status_plantar:
+        # Se esperando tempo de embebição:
+        elif not info_cultivo.status_soaking:
             return render_template("dashboardWaiting.html")
+        # Painel de controle integral
         else:
             esp = PairedESP32.query.filter_by(cod_esp=cod_esp).first()
             esp_cultivo = CultivoESP32.query.filter_by(cod_esp=cod_esp).first()
@@ -310,6 +314,7 @@ def dashboard():
             
     return Response(status=401)  
 
+# Novo cultivo
 @app.route('/start')
 def start():
     values = request.args.get('cod').split('?')
@@ -318,7 +323,7 @@ def start():
     
     if cod_esp and seed_id:                     
         microgreen = Datasheet.query.filter_by(id=seed_id).first()
-        esp_cultivo = CultivoESP32(cod_esp, microgreen.seed_type)
+        esp_cultivo = CultivoESP32(cod_esp, microgreen.seed_type, microgreen.min_days_harvest)
 
         # INFORMAR A ESP QUE FOI DADO O START NO CULTIVO
         # CRONOMETRAR TEMPO DE EMBEBIÇÃO        
@@ -338,12 +343,14 @@ def start():
         return redirect('/list')
     return Response(status=401)
 
+# Desconexão da conta
 @app.route('/logout', methods=['GET'])
 def logout():
     if request.method == 'GET':
         session.pop('username')
         return redirect('/')
 
+# HTTP auxiliar: adicionar dados a BD (datasheet de cultivos)
 @app.route('/datasheet')
 def fill_datasheet():
     if Datasheet.query.first() == None:
@@ -351,7 +358,7 @@ def fill_datasheet():
         soaking_time2 = "não embeba as sementes."
         watering = "manter sempre úmido."
 
-        agriao = Datasheet("Agrião", soaking_time1+"6 horas.",21,"4-6 colheres de sopa.", watering, 7.5, 0, 4)
+        agriao = Datasheet("Agrião", soaking_time1+"1 minuto.",21,"4-6 colheres de sopa.", watering, 7.5, 2, 4)
         cevada = Datasheet("Cevada", soaking_time1+"10 horas.",21,"1½ - 2 xícaras.", watering, 12.5, 6, 9)
         aveia = Datasheet("Aveia", soaking_time1+"3 horas.",21,"1½  - 2 xícaras.", watering, 12.5, 6, 9)
         trigo = Datasheet("Trigo", soaking_time1+"3 horas.",23,"1½ - 2 xícaras.", watering, 12.5, 6, 9)
@@ -370,33 +377,63 @@ def fill_datasheet():
 
     return Response(status=204)
 
-@app.route('/delete/pair/<cod>')
-def delete_pair(cod):
-    esp = PairedESP32.query.filter_by(cod_esp=cod).first()
-    db.session.delete(esp)
+# Finalizar um cultivo 
+@app.route('/encerrar/<int:cod_esp>', methods=['GET'])
+def encerrar(cod_esp):    
+    cultivo = CultivoESP32.query.filter_by(cod_esp=cod_esp).first()
+    db.session.delete(cultivo)
+    
+    for esp in Dados_ESP32.query.filter_by(cod_esp=cod_esp).all():           
+        db.session.delete(esp)
+    
     db.session.commit()
+    return Response(status=204)
 
-# ROTA PARA REENVIAR OS DADOS DO MICROVERDE PARA O FRONTEND
+# HTTP auxiliar (Requisição JS): checar fim do tempo de embebição para atualizar o status do painel de controle automaticamente
+@app.route('/checkfinish/<int:cod_user>', methods=['GET'])
+def check(cod_user): 
+    res = []
+
+    for esp in PairedESP32.query.filter_by(cod_user=cod_user).all():
+        try:
+            cultivo = CultivoESP32.query.filter_by(cod_esp=esp.cod_esp).first() 
+            res.append(cultivo.status_soaking)
+        except AttributeError:
+            res.append(False)
+
+    response = make_response(json.dumps(res))
+    response.content_type = 'application/json'
+
+    return response
+
+# HTTP auxiliar (Requisição JS): reenviar dados de cultivo para o frontend
 @app.route('/info/<int:id>', methods=['GET'])
 def get_seed_info(id):  
     if request.method == 'GET':
         microverde = Datasheet.query.filter_by(id=id).first()        
         return datasheet_schema.jsonify(microverde)
 
-@app.route('/data', methods=["GET", "POST"])
-def data():   
-    Temperature = round(random() * 100,2)
-    Umidade = round(random() * 100,2)
-    Altura = round(random() * 100,2)
-    time = datetime.datetime.now().strftime("%H:%M:%S")
+# HTTP auxiliar (Requisição JS): reenvio de dados de sensores para o painel de controle
+@app.route('/data/<int:cod_esp>', methods=["GET", "POST"])
+def data(cod_esp):  
+    dados_esp = Dados_ESP32.query.filter_by(cod_esp=cod_esp).order_by(desc(Dados_ESP32.hora_coleta)).limit(20).all()
+    
+    Temperatura, Umidade, Altura, time = [], [], [], []
+ 
+    for dataset in dados_esp:
+        Temperatura.append(dataset.temperatura)
+        Umidade.append(dataset.umidade)
+        Altura.append(dataset.altura)
+        time.append(dataset.hora_coleta.strftime("%H:%M:%S"))
 
-    data = [time, Temperature, Umidade, Altura]
+    data = [time, Temperatura, Altura, Umidade]    
 
     response = make_response(json.dumps(data))
     response.content_type = 'application/json'
 
     return response
 
+# HTTP auxiliar (Requisição JS): reenvio de horário atual para o painel de controle
 @app.route('/time', methods=["GET", "POST"])
 def time():    
     time = datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
@@ -412,9 +449,9 @@ def time():
 def handle_connect(client, userdata, flags, rc):
    if rc == 0:  
        print('\nMQTT: Conectado ao broker com sucesso.')    
-       mqtt.subscribe(topic_up) 
-       mqtt.subscribe(topic_down) 
-       mqtt.subscribe(topic_data) 
+       mqtt.subscribe(topic=topic_up, qos=1) 
+       mqtt.subscribe(topic=topic_down, qos=1) 
+       mqtt.subscribe(topic=topic_data, qos=1) 
        print('MQTT: Subscrito nos tópicos com sucesso.')    
    else:
        print('\nMQTT: Erro na conexão. Código:', rc)
@@ -441,24 +478,58 @@ def handle_mqtt_message(client, userdata, message):
 
     # HANDLE: RECEBER DADOS GERAIS
     elif data["topic"] == topic_up:
+        # Quando a ESP é ligada:
         if dados == "esp-on":                   
             with app.app_context():        
-                esp_cultivo = CultivoESP32.query.filter_by(cod_esp=cod_esp).first()                  
-                esp_cultivo.status_irrigar = False
-                esp_cultivo.status_iluminar = False 
-                esp_cultivo.status_ventilar = False 
-                db.session.commit()
-        if dados == "finish":
+                try:
+                    esp_cultivo = CultivoESP32.query.filter_by(cod_esp=cod_esp).first()                  
+                    esp_cultivo.status_irrigar = False
+                    esp_cultivo.status_iluminar = False 
+                    esp_cultivo.status_ventilar = False 
+                    db.session.commit()
+                except AttributeError:
+                    pass 
+        # Quando o tempo de embebição termina
+        elif dados == "finish":
             with app.app_context(): 
                 esp_cultivo = CultivoESP32.query.filter_by(cod_esp=cod_esp).first() 
-                esp_cultivo.status_plantar = True
+                esp_cultivo.status_soaking = True                
+                for dados in Dados_ESP32.query.filter_by(cod_esp=cod_esp).all():
+                    db.session.delete(dados)
                 db.session.commit()
+        # Quando o tempo de colheita termina
+        elif dados == "colheita":
+            with app.app_context(): 
+                esp_cultivo = CultivoESP32.query.filter_by(cod_esp=cod_esp).first() 
+                esp_cultivo.status_colheita = True
+                db.session.commit()
+
+                # Notificação SMS
+                esp = PairedESP32.query.filter_by(cod_esp=cod_esp).first()
+                user = Users.query.filter_by(cod_user=esp.cod_user).first()
+                
+                account_sid = 'AC9ca8004589b7fb5d596b1a41742a7248'
+                auth_token = 'b8c3774b822bc6e4293a0f07d5c653b7'
+                client = Client(account_sid, auth_token)
+                
+                sms = "Esta mensagem está sendo enviada de um de seus Babygreens "
+                sms += "por um motivo! Parabéns, " + str(user.first_name) + "! " 
+                sms += str(esp.name_esp) + " informa que você já pode colher seus novos microverdes de " + str(esp_cultivo.seed) + "!" 
+                sms += " Aproveite essa experiência 🌱"
+
+                message = client.messages.create(
+                                from_='+15734923846',
+                                body =sms,
+                                to =str(user.user_phone)
+                            )
+  
+                print(message.sid)
 
 @app.route('/publish/<path:msg>', methods=['GET','POST'])
 def publish_message(msg):
   request_data = {'topic':topic_down, 'msg':msg}  
-  publish_result = mqtt.publish(request_data['topic'], request_data['msg'])
-#   print("MQTT: Publicação realizada. Código: " + str(publish_result[0]))
+  publish_result = mqtt.publish(request_data['topic'], request_data['msg'], 1)
+  print("MQTT: Publicação realizada. Código: " + str(publish_result[0]))
 
   # MODIFICAR STATUS DOS BOTÕES DE COMANDO
   dados = msg.split("/")
@@ -471,11 +542,12 @@ def publish_message(msg):
     esp_cultivo.status_iluminar = False if esp_cultivo.status_iluminar else True
   elif dados[1] == "ventilar":
     esp_cultivo.status_ventilar = False if esp_cultivo.status_ventilar else True
-
+  elif dados[1].isdigit() and int(dados[1]) < 60:
+    esp_cultivo.status_plantar = True
   db.session.commit()
        
   return Response(status=204)
 ##########################################################################################################
    
 if __name__ ==  '__main__':    
-    app.run(debug=False, port=6000)
+    app.run(debug=False, port=6001)

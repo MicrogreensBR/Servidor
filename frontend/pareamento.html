@@ -25,6 +25,7 @@
   </div>
 
   <div class="forms">
+    <div class="errorMSG">{{error}}</div>  
     <form action="/pair" method="post">
       <input class="input" type="text" name='code_esp' placeholder="Código"><br> 
       <input class="input" type="text" name='name_esp' placeholder="Nome"><br> 
@@ -35,12 +36,3 @@
 
   </div>
 {% endblock %}  
-
-{% block scriptjs %}
-<script>
-  let message = "{{error}}";     
-  if(message != ""){
-    alert(message);      
-  }
-</script>
-{% endblock %}
